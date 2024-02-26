@@ -43,6 +43,10 @@ class User extends Authenticatable implements FilamentUser, HasTenants, MustVeri
     {
         return true;
     }
+    public function canAccessFilament(): bool
+    {
+        return str_ends_with($this->email, '@nopulp.com') && $this->hasVerifiedEmail();
+    }
 
     /** @return Collection<int,Team> */
     public function getTenants(Panel $panel): Collection

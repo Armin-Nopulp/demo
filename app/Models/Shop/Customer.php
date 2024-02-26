@@ -10,12 +10,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Laravel\Scout\Searchable;
 
 class Customer extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
+    use Searchable;
     /**
      * @var string
      */
@@ -26,6 +27,9 @@ class Customer extends Model
      */
     protected $casts = [
         'birthday' => 'date',
+        'name' => 'encrypted',
+        'email' => 'encrypted',
+        'phone' => 'encrypted',
     ];
 
     /** @return MorphToMany<Address> */
@@ -45,4 +49,9 @@ class Customer extends Model
     {
         return $this->hasManyThrough(Payment::class, Order::class, 'shop_customer_id');
     }
+    public function searchableAs(): string
+    {
+        return 'Customer';
+    }
+
 }
